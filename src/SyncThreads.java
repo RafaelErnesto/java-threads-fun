@@ -2,17 +2,25 @@
 public class SyncThreads {
     public static Integer counter = 0;
 
+    public synchronized static void increment() {
+        counter++;
+    }
+
+    public synchronized static void decrement() {
+        counter--;
+    }
+
     public static void main(String[] args) {
 
         var thread1 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                counter++;
+                increment();
             }
         });
 
         var thread2 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                counter--;
+                decrement();
             }
         });
 
