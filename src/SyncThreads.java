@@ -1,5 +1,8 @@
 
 public class SyncThreads {
+
+    //just to be clear, the synchronization is not on the counter, but on the object SyncThreads, every object in java
+    // has an intrinsic lock, and when we use the synchronized keyword, we are locking the object that is being used
     public static Integer counter = 0;
 
     public synchronized static void increment() {
