@@ -12,31 +12,37 @@ public class ConsumerAndProducer {
     public void producer() throws InterruptedException {
         System.out.println("Producer started");
         while (true) {
-            lock.lock();
+            try{
+                lock.lock();
 
-            for (int i = 0; i < MAX_SIZE; i++) {
-                list.add(i);
-                System.out.println("Produced: " + i);
-                Thread.sleep(1000);
+                for (int i = 0; i < MAX_SIZE; i++) {
+                    list.add(i);
+                    System.out.println("Produced: " + i);
+                    Thread.sleep(1000);
+                }
+                condition.signal();
+                condition.await();
+            } finally {
+                lock.unlock();
             }
-            condition.signal();
-            condition.await();
-            lock.unlock();
         }
     }
 
     public void consumer() throws InterruptedException {
         System.out.println("Consumer started");
         while (true) {
-            lock.lock();
-            while (!list.isEmpty()) {
-                int value = list.remove(list.size() - 1);
-                System.out.println("Consumed: " + value);
-                Thread.sleep(1000);
+            try {
+                lock.lock();
+                while (!list.isEmpty()) {
+                    int value = list.remove(list.size() - 1);
+                    System.out.println("Consumed: " + value);
+                    Thread.sleep(1000);
+                }
+                condition.signal();
+                condition.await();
+            } finally{
+                lock.unlock();
             }
-            condition.signal();
-            condition.await();
-            lock.unlock();
         }
     }
 }
