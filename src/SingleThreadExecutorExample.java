@@ -25,5 +25,7 @@ class SingleThreadExecutorExample {
             executor.execute(new Worker());
         }
 
+        executor.shutdown();
+
     }
 }
